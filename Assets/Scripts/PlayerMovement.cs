@@ -15,8 +15,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask ground;
     [SerializeField] LayerMask climbable;
 
-    bool isClimbing = false; // new variable to track if player is climbing
-    Vector3 climbDirection; // new variable to track the direction to climb
+    bool isClimbing = false; 
+    Vector3 climbDirection; 
 
     bool isRunning = false;
     bool isJumped = false;
@@ -38,44 +38,49 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        if (!isClimbing) // only move normally if not climbing
+        if (!isClimbing) 
         {
-            rb.velocity = new Vector3(horizontalInput * movementSpeed, rb.velocity.y, verticalInput * movementSpeed);
+            float speed = movementSpeed;
+            if (Input.GetKey(KeyCode.LeftShift)) 
+            {
+                speed *= 2f; 
+            }
+            rb.velocity = new Vector3(horizontalInput * speed, rb.velocity.y, verticalInput * speed);
 
             if (Input.GetButtonDown("Jump") && IsGrounded())
             {
                 Jump();
             }
         }
-        else // climb up the wall
+        else
         {
             rb.velocity = climbDirection * climbSpeed;
 
-            if (transform.position.y >= climbDirection.y) // if reached the top, stop climbing
+            if (transform.position.y >= climbDirection.y)
             {
                 isClimbing = false;
             }
         }
 
         // check for climbable surfaces
-        if (verticalInput > 0) // climbing up
+        if (verticalInput > 0) 
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, climbCheckDistance, climbable))
             {
-                climbDirection = Vector3.up + hit.normal; // set climb direction to the surface normal plus up
-                climbDirection.Normalize(); // normalize the vector
-                isClimbing = true; // start climbing
+                climbDirection = Vector3.up + hit.normal; 
+                climbDirection.Normalize(); 
+                isClimbing = true; 
             }
         }
-        else if (verticalInput < 0) // reversing climb
+        else if (verticalInput < 0) 
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, -transform.forward, out hit, climbCheckDistance, climbable))
             {
-                climbDirection = -Vector3.up - hit.normal; // set climb direction to the opposite of surface normal minus down
-                climbDirection.Normalize(); // normalize the vector
-                isClimbing = true; // start climbing
+                climbDirection = -Vector3.up - hit.normal;
+                climbDirection.Normalize(); 
+                isClimbing = true; 
             }
         }
 
