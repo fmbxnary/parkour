@@ -15,15 +15,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask ground;
     [SerializeField] LayerMask climbable;
 
-    bool isClimbing = false; 
     Vector3 climbDirection; 
 
+    bool isClimbing = false; 
     bool isRunning = false;
     bool isJumped = false;
     bool isWalking = false;
     bool isBackWalking = false;
     bool isLeftWalking = false;
     bool isRightWalking = false;
+    bool isSliding = false;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +52,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 Jump();
             }
+
+            if (Input.GetKeyDown(KeyCode.C) && IsGrounded() && isRunning)
+            {
+                StartCoroutine(Slide());
+            }
         }
         else
         {
@@ -68,21 +74,14 @@ public class PlayerMovement : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, climbCheckDistance, climbable))
             {
-                climbDirection = Vector3.up + hit.normal; 
+                climbDirection = Vector3.up; 
                 climbDirection.Normalize(); 
                 isClimbing = true; 
             }
         }
-        else if (verticalInput < 0) 
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, -transform.forward, out hit, climbCheckDistance, climbable))
-            {
-                climbDirection = -Vector3.up - hit.normal;
-                climbDirection.Normalize(); 
-                isClimbing = true; 
-            }
-        }
+
+        
+
 
         // Update animator parameters
         isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -101,9 +100,29 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("leftWalk", isLeftWalking);
 
         isRightWalking = Input.GetKey(KeyCode.D);
-        animator.SetBool("rightWalk", isRightWalking);
+        animator.SetBool("rightWalk", isRightWalking);        
 
         animator.SetBool("climb", isClimbing);
+    }
+
+    IEnumerator Slide()
+    {
+        animator.SetBool("slide", true);
+        // Store the player's original rotation
+        Quaternion originalRotation = transform.rotation;
+
+        // Set the player's velocity to slide them in the z direction
+        rb.velocity = new Vector3(0f, 0f, rb.velocity.z).normalized * movementSpeed * 2f;
+
+        // Rotate the player by -90 degrees around the x-axis
+        transform.rotation = Quaternion.Euler(-90f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+
+        // Wait for 1 second
+        yield return new WaitForSeconds(1f);
+
+        // Reset the player's rotation to their original rotation
+        transform.rotation = originalRotation;
+        animator.SetBool("slide", false);
     }
 
     private void OnCollisionEnter(Collision collision)

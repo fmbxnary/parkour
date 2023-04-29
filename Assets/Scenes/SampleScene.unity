@@ -1238,8 +1238,8 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: dc7f5a5df2f1ac14c8c394baa6076443, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
+  m_Radius: 0.49999997
+  m_Height: 1.9999999
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &448445155
@@ -1341,7 +1341,7 @@ MonoBehaviour:
   movementSpeed: 4
   jumpForce: 5
   climbSpeed: 3.22
-  climbCheckDistance: 0.3
+  climbCheckDistance: 0.27
   groundCheck: {fileID: 1091752107}
   ground:
     serializedVersion: 2
@@ -2026,7 +2026,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 679569528}
-  m_LocalRotation: {x: 0.08917009, y: -0.000000017665283, z: 0.0000000015815148, w: 0.99601644}
+  m_LocalRotation: {x: 0.08917009, y: -0.000000017665275, z: 0.0000000015815143, w: 0.99601644}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4607,7 +4607,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720537517}
-  m_LocalRotation: {x: 0.12529148, y: -0, z: -0, w: 0.99211997}
+  m_LocalRotation: {x: 0.12529148, y: -1e-45, z: -0, w: 0.99211997}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
