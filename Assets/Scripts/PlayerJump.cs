@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour
 {
-    public float jumpForce = 2.0f;
-    public Transform groundCheck;
-    public float checkRadius = 0.5f;
-    public LayerMask groundObjects;
+    public float jumpForce = 5f;
 
     private Rigidbody rb;
     private bool isJumping = false;
-    private bool isGrounded = false;
+
+    // Reference to the PlayerAnimation script
+    private PlayerAnimation playerAnimation;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        // Get the PlayerAnimation script
+        playerAnimation = GetComponent<PlayerAnimation>();
     }
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, checkRadius, groundObjects);
-
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump"))
         {
             isJumping = true;
         }
