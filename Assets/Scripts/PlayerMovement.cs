@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform groundCheck;
     [SerializeField] LayerMask ground;
     [SerializeField] LayerMask climbable;
+    [SerializeField] Cinemachine.CinemachineFreeLook freeLookCam;
 
     Vector3 climbDirection; 
 
@@ -39,14 +40,21 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        if (!isClimbing) 
+        if (!isClimbing)
         {
             float speed = movementSpeed;
-            if (Input.GetKey(KeyCode.LeftShift)) 
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                speed *= 2f; 
+                speed *= 2f;
             }
-            rb.velocity = new Vector3(horizontalInput * speed, rb.velocity.y, verticalInput * speed);
+
+            // Rotate the player to face the direction the camera is facing
+            Quaternion playerRotation = Quaternion.Euler(0, freeLookCam.m_XAxis.Value, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, playerRotation, Time.deltaTime * speed);
+
+            Vector3 moveDirection = verticalInput * transform.forward + horizontalInput * transform.right;
+
+            rb.velocity = new Vector3(moveDirection.x * speed, rb.velocity.y, moveDirection.z * speed);
 
             if (Input.GetButtonDown("Jump") && IsGrounded())
             {
