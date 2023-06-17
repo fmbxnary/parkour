@@ -40,12 +40,12 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        if (!isClimbing)
+        if (!isClimbing) 
         {
             float speed = movementSpeed;
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift)) 
             {
-                speed *= 2f;
+                speed *= 2f; 
             }
 
             // Rotate the player to face the direction the camera is facing
