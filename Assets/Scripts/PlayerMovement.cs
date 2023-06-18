@@ -37,24 +37,29 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isSliding)
+        {
+            return;
+        }
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        if (!isClimbing) 
+        if (!isClimbing && !isSliding)
         {
             float speed = movementSpeed;
-            if (Input.GetKey(KeyCode.LeftShift)) 
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                speed *= 2f; 
+                speed *= 2f;
             }
 
             // Rotate the player to face the direction the camera is facing
             Quaternion playerRotation = Quaternion.Euler(0, freeLookCam.m_XAxis.Value, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, playerRotation, Time.deltaTime * speed);
 
-            Vector3 moveDirection = verticalInput * transform.forward + horizontalInput * transform.right;
-
-            rb.velocity = new Vector3(moveDirection.x * speed, rb.velocity.y, moveDirection.z * speed);
+            
+                Vector3 moveDirection = verticalInput * transform.forward + horizontalInput * transform.right;
+                rb.velocity = new Vector3(moveDirection.x * speed, rb.velocity.y, moveDirection.z * speed);
+            
 
             if (Input.GetButtonDown("Jump") && IsGrounded())
             {
@@ -115,12 +120,19 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator Slide()
     {
+        isSliding = true;
         animator.SetBool("slide", true);
-        // Store the player's original rotation
-        Quaternion originalRotation = transform.rotation;
 
-        // Set the player's velocity to slide them in the z direction
-        rb.velocity = new Vector3(0f, 0f, rb.velocity.z).normalized * movementSpeed * 2f;
+        // Store the player's original rotation and movement direction
+        Quaternion originalRotation = transform.rotation;
+        Vector3 slideDirection = rb.velocity.normalized;
+
+        // Temporarily disable the camera's follow speed
+        var originalFollowSpeed = freeLookCam.m_XAxis.m_MaxSpeed;
+        freeLookCam.m_XAxis.m_MaxSpeed = 0;
+
+        // Set the player's velocity to slide them in their moving direction
+        rb.velocity = slideDirection * movementSpeed * 2f;
 
         // Rotate the player by -90 degrees around the x-axis
         transform.rotation = Quaternion.Euler(-90f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
@@ -130,8 +142,15 @@ public class PlayerMovement : MonoBehaviour
 
         // Reset the player's rotation to their original rotation
         transform.rotation = originalRotation;
+
+        // Reset the camera's follow speed
+        freeLookCam.m_XAxis.m_MaxSpeed = originalFollowSpeed;
+
         animator.SetBool("slide", false);
+        isSliding = false;
     }
+
+
 
     private void OnCollisionEnter(Collision collision)
     {
