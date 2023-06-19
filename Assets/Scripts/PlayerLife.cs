@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine;
 
 public class PlayerLife : MonoBehaviour
 {
     public static int nextLevelIndex = 1;
+    public static int points = 0;
 
     bool dead = false;
     private void Update()
@@ -33,12 +32,16 @@ public class PlayerLife : MonoBehaviour
         {
             LoadNextLevel();
         }
+        else if (other.gameObject.CompareTag("Collectable"))
+        {
+            Destroy(other.gameObject);
+            points += 100;
+        }
     }
 
     void Die()
     {
-        // Reset the points here, when player dies
-        ItemCollector.points = 0;
+        points = 0; // Reset the points here, when player dies
         Invoke(nameof(ReloadLevel), 1.3f);
         dead = true;
     }
