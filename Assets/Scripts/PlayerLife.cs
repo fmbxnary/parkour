@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerLife : MonoBehaviour
 {
+    public static int nextLevelIndex = 1;
+
     bool dead = false;
     private void Update()
     {
@@ -25,8 +27,18 @@ public class PlayerLife : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Finish Flag"))
+        {
+            LoadNextLevel();
+        }
+    }
+
     void Die()
     {
+        // Reset the points here, when player dies
+        ItemCollector.points = 0;
         Invoke(nameof(ReloadLevel), 1.3f);
         dead = true;
     }
@@ -34,5 +46,18 @@ public class PlayerLife : MonoBehaviour
     void ReloadLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void LoadNextLevel()
+    {
+        if (nextLevelIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            nextLevelIndex++; // Increase the nextLevelIndex for the next scene load
+            SceneManager.LoadScene(nextLevelIndex);
+        }
+        else
+        {
+            Debug.LogError("Next level index is out of bounds!");
+        }
     }
 }

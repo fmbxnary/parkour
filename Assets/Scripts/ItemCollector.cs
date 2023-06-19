@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ItemCollector : MonoBehaviour
 {
-    int points = 0;
+    public static int points = 0;
 
     [SerializeField] Text pointsText;
     private void OnTriggerEnter(Collider other)
