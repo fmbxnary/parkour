@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (isSliding)
         {
             return;
@@ -119,6 +120,8 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("rightWalk", isRightWalking);        
 
         animator.SetBool("climb", isClimbing);
+        bool isFalling = !IsGrounded() && rb.velocity.y < 0;
+        animator.SetBool("falling", isFalling);
     }
 
     IEnumerator Slide()
