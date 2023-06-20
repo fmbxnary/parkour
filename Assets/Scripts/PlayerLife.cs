@@ -6,6 +6,7 @@ public class PlayerLife : MonoBehaviour
     public static int nextLevelIndex = 1;
     public static int points = 0;
     public AudioSource dieSound;
+    public AudioSource Collect;
     bool dead = false;
     private void Update()
     {
@@ -36,6 +37,7 @@ public class PlayerLife : MonoBehaviour
         {
             Destroy(other.gameObject);
             points += 100;
+            Collect.Play();
         }
         else if (other.gameObject.CompareTag("Axe"))
         {
