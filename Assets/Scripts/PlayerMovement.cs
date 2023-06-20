@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     bool isRightWalking = false;
     bool isSliding = false;
 
+    public AudioSource jumpRaiseSound;
+    public AudioSource playerJump;
     // Start is called before the first frame update
     void Start()
     {
@@ -63,6 +65,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButtonDown("Jump") && IsGrounded())
             {
+                playerJump.Play();
                 Jump();
             }
 
@@ -159,6 +162,14 @@ public class PlayerMovement : MonoBehaviour
             Destroy(collision.transform.parent.gameObject);
             Jump();
         }
+        else if (collision.gameObject.CompareTag("Trampoline"))
+        {
+            jumpForce = 10f;
+            Jump();
+            jumpForce = 5f;
+            jumpRaiseSound.Play();
+        }
+        
     }
 
     void Jump()

@@ -8,6 +8,8 @@ TagManager:
   - Enemy Head
   - Collectable
   - Finish Flag
+  - Trampoline
+  - Axe
   layers:
   - Default
   - TransparentFX

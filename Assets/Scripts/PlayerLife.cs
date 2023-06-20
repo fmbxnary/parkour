@@ -5,7 +5,7 @@ public class PlayerLife : MonoBehaviour
 {
     public static int nextLevelIndex = 1;
     public static int points = 0;
-
+    public AudioSource dieSound;
     bool dead = false;
     private void Update()
     {
@@ -37,6 +37,10 @@ public class PlayerLife : MonoBehaviour
             Destroy(other.gameObject);
             points += 100;
         }
+        else if (other.gameObject.CompareTag("Axe"))
+        {
+            Die();
+        }
     }
 
     void Die()
@@ -44,6 +48,7 @@ public class PlayerLife : MonoBehaviour
         points = 0; // Reset the points here, when player dies
         Invoke(nameof(ReloadLevel), 1.3f);
         dead = true;
+        dieSound.Play();
     }
 
     void ReloadLevel()
