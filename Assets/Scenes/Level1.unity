@@ -1059,6 +1059,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dieSound: {fileID: 524282727}
   Collect: {fileID: 1446268576}
+  winScreen: {fileID: 0}
+  pointsText: {fileID: 0}
 --- !u!114 &448445161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1355,7 +1357,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 679569528}
-  m_LocalRotation: {x: 0.08917009, y: 1.7154378e-23, z: -1.1779977e-24, w: 0.99601644}
+  m_LocalRotation: {x: 0.08917009, y: -0.000000017665283, z: 0.0000000015815148, w: 0.99601644}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1838,7 +1840,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.107224606, y: -0.00000002155378, z: 0.0000000023244966, w: 0.9942348}
+  m_LocalRotation: {x: 0.10722462, y: -0.000000034480628, z: 0.0000000037186112, w: 0.9942348}
   m_LocalPosition: {x: 0, y: 1.5714283, z: -6.122448}
   m_LocalScale: {x: 1.020408, y: 2.19, z: 1.020408}
   m_ConstrainProportionsScale: 0
@@ -2140,7 +2142,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074368392}
-  m_LocalRotation: {x: 0.1072246, y: -0.000000020240858, z: 0.0000000021829025, w: 0.99423486}
+  m_LocalRotation: {x: 0.10722461, y: -0.000000017633681, z: 0.0000000019017288, w: 0.99423486}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3321,8 +3323,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+      - m_Target: {fileID: 2086191115}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:

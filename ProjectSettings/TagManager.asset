@@ -10,6 +10,7 @@ TagManager:
   - Finish Flag
   - Trampoline
   - Axe
+  - GameOver
   layers:
   - Default
   - TransparentFX

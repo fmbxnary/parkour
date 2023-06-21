@@ -1,5 +1,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerLife : MonoBehaviour
 {
@@ -9,12 +11,36 @@ public class PlayerLife : MonoBehaviour
     public AudioSource Collect;
     bool dead = false;
     public GameObject winScreen;
+    public Text pointsText;
+    private float colorChangeTime = 2f;
     private void Update()
     {
         if (transform.position.y < -1f && !dead)
         {
             Die();
         }
+    }
+
+    IEnumerator ChangeTextColor()
+    {
+        while (true)
+        {
+            float t = 0;
+            while (t < colorChangeTime)
+            {
+                float hue = t / colorChangeTime;
+                pointsText.color = Color.HSVToRGB(hue, 1f, 1f);
+
+                yield return null;
+
+                t += Time.deltaTime;
+            }
+        }
+    }
+
+    void StartColorChange()
+    {
+        StartCoroutine(ChangeTextColor());
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -44,6 +70,14 @@ public class PlayerLife : MonoBehaviour
         {
             Die();
         }
+        else if (other.CompareTag("GameOver"))
+        {
+            
+                winScreen.SetActive(true);
+                pointsText.text = "Points: " + points;
+                StartColorChange();
+
+        }
     }
 
     void Die()
@@ -66,10 +100,6 @@ public class PlayerLife : MonoBehaviour
             
             SceneManager.LoadScene(nextLevelIndex+1);
             nextLevelIndex++;
-        }
-        else
-        {
-            winScreen.SetActive(true);
         }
     }
 }
