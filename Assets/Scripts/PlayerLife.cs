@@ -8,6 +8,7 @@ public class PlayerLife : MonoBehaviour
     public AudioSource dieSound;
     public AudioSource Collect;
     bool dead = false;
+    public GameObject winScreen;
     private void Update()
     {
         if (transform.position.y < -1f && !dead)
@@ -60,14 +61,15 @@ public class PlayerLife : MonoBehaviour
 
     void LoadNextLevel()
     {
-        if (nextLevelIndex < SceneManager.sceneCountInBuildSettings)
+        if (nextLevelIndex <= SceneManager.sceneCountInBuildSettings)
         {
-            nextLevelIndex++; // Increase the nextLevelIndex for the next scene load
-            SceneManager.LoadScene(nextLevelIndex);
+            
+            SceneManager.LoadScene(nextLevelIndex+1);
+            nextLevelIndex++;
         }
         else
         {
-            Debug.LogError("Next level index is out of bounds!");
+            winScreen.SetActive(true);
         }
     }
 }
