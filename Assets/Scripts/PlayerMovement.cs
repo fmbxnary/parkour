@@ -15,8 +15,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask ground;
     [SerializeField] LayerMask climbable;
     [SerializeField] Cinemachine.CinemachineFreeLook freeLookCam;
-
-    Vector3 climbDirection; 
+    [SerializeField] LayerMask bars; // The layer mask for bars
+    Vector3 climbDirection;
+    GameObject hangingBar;
 
     bool isClimbing = false; 
     bool isRunning = false;
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     bool isLeftWalking = false;
     bool isRightWalking = false;
     bool isSliding = false;
+    bool isHanging = false;
 
     public AudioSource jumpRaiseSound;
     public AudioSource playerJump;
@@ -39,7 +41,30 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isHanging)
+        {
+            // Disable the player's gravity while hanging
+            rb.useGravity = false;
+
+            // Calculate the position where the player should hang
+            Vector3 hangPosition = hangingBar.transform.position;
+            hangPosition.y -= 0.7f;  // Adjust this value to match the length of the player's arms
+            transform.position = hangPosition;
+            // Make the player hang in place
+            rb.velocity = Vector3.zero;
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                // Enable the player's gravity before jumping
+                rb.useGravity = true;
+                isHanging = false;
+                hangingBar = null;  // Clear the bar
+                                    // Jump in the forward direction of the player
+                JumpInDirection(transform.forward);
+            }
+
+            return;
+        }
         if (isSliding)
         {
             return;
@@ -84,11 +109,11 @@ public class PlayerMovement : MonoBehaviour
                 isClimbing = false;
             }
         }
-
+        RaycastHit hit;
         // check for climbable surfaces
         if (verticalInput > 0) 
         {
-            RaycastHit hit;
+            
             if (Physics.Raycast(transform.position, transform.forward, out hit, climbCheckDistance, climbable))
             {
                 climbDirection = Vector3.up; 
@@ -97,9 +122,14 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        
 
 
+
+        if (Physics.SphereCast(transform.position, 0.5f, transform.forward, out hit, climbCheckDistance, bars))
+        {
+            isHanging = true;
+            hangingBar = hit.collider.gameObject;  // Store the bar
+        }
         // Update animator parameters
         isRunning = Input.GetKey(KeyCode.LeftShift);
         animator.SetBool("run", isRunning);
@@ -122,6 +152,9 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("climb", isClimbing);
         bool isFalling = !IsGrounded() && rb.velocity.y < 0;
         animator.SetBool("falling", isFalling);
+
+        animator.SetBool("hang", isHanging);
+
     }
 
     IEnumerator Slide()
@@ -173,6 +206,12 @@ public class PlayerMovement : MonoBehaviour
             jumpRaiseSound.Play();
         }
         
+    }
+    void JumpInDirection(Vector3 direction)
+    {
+        // Combine the forward force with an upward force
+        Vector3 force = direction * jumpForce + Vector3.up * jumpForce;
+        rb.velocity = force;
     }
 
     void Jump()
